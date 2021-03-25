@@ -41,15 +41,19 @@ const menu = [
         }
     ] : []),
     {
-        label: 'File',
-        submenu: [
-            {
-                label: 'Quit',
-                accelerator: 'CmdOrCtrl+W',
-                click: () => app.quit()
-            }
-        ]
-    }
+        role: 'fileMenu'
+    },
+    ...(isDev ? [
+        {
+            label: 'Developer',
+            submenu: [
+                { role: 'reload' },
+                { role: 'forcereload' },
+                { type: 'separator' },
+                { role: 'toggleDevTools' }
+            ]
+        }
+    ] : [])
 ]
 
 app.on('activate', () => {
