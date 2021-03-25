@@ -17,8 +17,16 @@ function createMainWindow () {
         height: 600,
         icon: `${__dirname}/assets/icons/Icon_256x256.png`,
         resizable: isDev,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
     })
+
+    if (isDev) {
+        mainWindow.webContents.openDevTools()
+    }
 
     mainWindow.loadFile('./app/index.html')
 }
