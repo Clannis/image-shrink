@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, globalShortcut } = require('electron')
+const { app, BrowserWindow, Menu, globalShortcut, ipcMain } = require('electron')
 
 // Set env
 process.env.NODE_ENV = 'development'
@@ -91,6 +91,10 @@ const menu = [
         }
     ] : [])
 ]
+
+ipcMain.on('image:minimize', (e, options) => {
+    console.log(options)
+})
 
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
