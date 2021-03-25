@@ -108,6 +108,7 @@ ipcMain.on('image:minimize', (e, options) => {
 async function shrinkImage({imgPath, quality, destination}) {
     try {
         const pngQuality = quality/100
+        mainWindow.webContents.send('image:shrinking')
         const files = await imagemin([slash(imgPath)], {
             destination,
             plugins: [
@@ -135,9 +136,9 @@ app.on('activate', () => {
 })
 
 // Keeps app running when all windows closed
-//
-// app.on('window-all-closed', () => {
-//     if (!isMac) {
-//         app.quit()
-//     }
-// })
+
+app.on('window-all-closed', () => {
+    if (!isMac) {
+        app.quit()
+    }
+})
