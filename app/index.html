@@ -55,7 +55,7 @@
 
         document.getElementById('output-path').innerText = path.join(os.homedir(), 'imageshrink')
 
-        // Onsubmit
+        // On submit
         form.addEventListener('submit', e => {
             e.preventDefault()
 
@@ -65,6 +65,13 @@
             ipcRenderer.send('image:minimize', {
                 imgPath,
                 quality
+            })
+        })
+
+        // On done
+        ipcRenderer.on('image:done', () => {
+            M.toast({
+                html: `Image resized to ${slider.value}% quality`
             })
         })
 
