@@ -17,8 +17,19 @@
         </h4>
         <ul class="collection">
             <li class="collection-item">Developer: James Dodds</li>
-            <li class="collection-item">Version: 1.0.0</li>
+            <li class="collection-item">Version: <span id="version"><span></li>
         </ul>
     </div>
+    <script>
+        const { ipcRenderer } = require("electron")
+        window.addEventListener('load', () => {
+            ipcRenderer.send('about:load')
+        })
+
+        ipcRenderer.on('about:version', (event, version) => {
+            console.log(version)
+            document.getElementById('version').innerText = version
+        })
+    </script>
 </body>
 </html>

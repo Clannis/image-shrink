@@ -1,7 +1,7 @@
 {
   "name": "image-shrink",
   "productName": "ImageShrink",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "App to optimize images",
   "main": "main.js",
   "scripts": {

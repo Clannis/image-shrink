@@ -1,6 +1,6 @@
 const path = require('path')
 const os = require('os')
-const { app, BrowserWindow, Menu, globalShortcut, ipcMain, shell } = require('electron')
+const { app, BrowserWindow, Menu, globalShortcut, ipcMain, shell, dialog } = require('electron')
 const imagemin = require('imagemin')
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const imageminPngquant = require('imagemin-pngquant')
@@ -8,7 +8,7 @@ const slash = require('slash')
 const log = require('electron-log')
 
 // Set env
-process.env.NODE_ENV = 'production'
+process.env.NODE_ENV = 'dev'
 
 // Set flags
 const isDev = process.env.NODE_ENV !== 'production' ? true : false
@@ -26,6 +26,7 @@ function createMainWindow () {
         resizable: isDev,
         backgroundColor: 'white',
         webPreferences: {
+            preload: path.join(__dirname, 'preload.js'),
             nodeIntegration: true,
             contextIsolation: false
         },
@@ -41,11 +42,16 @@ function createMainWindow () {
 function createAboutWindow () {
     aboutWindow = new BrowserWindow({
         title: 'About Image Shrink',
+        version: app.version,
         width: 300,
         height: 300,
         icon: `${__dirname}/assets/icons/Icon_256x256.png`,
         resizable: false,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
     })
 
     aboutWindow.loadFile('./app/about.html')
@@ -98,6 +104,18 @@ const menu = [
         }
     ] : [])
 ]
+
+ipcMain.on('select-dirs', async (event) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+      properties: ['openDirectory']
+    })
+    event.reply('dir:selected', result.filePaths)
+})
+
+ipcMain.on('about:load', (event) => {
+    const version = app.getVersion()
+    event.reply('about:version', version)
+})
 
 ipcMain.on('image:minimize', (e, options) => {
     options.destination = path.join(os.homedir(), 'imageshrink')
