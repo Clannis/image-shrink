@@ -32,10 +32,12 @@ form.addEventListener('submit', e => {
 
     const imgPath = img.files[0].path
     const quality = slider.value
+    const outputPath = output.value
 
     ipcRenderer.send('image:minimize', {
         imgPath,
-        quality
+        quality,
+        outputPath
     })
 })
 

@@ -118,17 +118,15 @@ ipcMain.on('about:load', (event) => {
 })
 
 ipcMain.on('image:minimize', (e, options) => {
-    options.destination = path.join(os.homedir(), 'imageshrink')
     shrinkImage(options)
-    
 })
 
-async function shrinkImage({imgPath, quality, destination}) {
+async function shrinkImage({imgPath, quality, outputPath}) {
     try {
         const pngQuality = quality/100
         mainWindow.webContents.send('image:shrinking')
         const files = await imagemin([slash(imgPath)], {
-            destination,
+            destination: outputPath,
             plugins: [
                 imageminMozjpeg({ quality }),
                 imageminPngquant({
@@ -139,7 +137,7 @@ async function shrinkImage({imgPath, quality, destination}) {
 
         log.info(files)
 
-        shell.openPath(destination)
+        shell.openPath(outputPath)
 
         mainWindow.webContents.send('image:done')
     } catch (err) {
