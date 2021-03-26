@@ -8,7 +8,7 @@ const slash = require('slash')
 const log = require('electron-log')
 
 // Set env
-process.env.NODE_ENV = 'dev'
+process.env.NODE_ENV = 'production'
 
 // Set flags
 const isDev = process.env.NODE_ENV !== 'production' ? true : false
